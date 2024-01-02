@@ -53,8 +53,6 @@ int main(void) {
       
     }
     
-    free(schedule);
-    
   }
 
   scaleScores(players, numPlayers, tournType);
