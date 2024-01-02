@@ -52,7 +52,7 @@ int main(void) {
       updatePerfs(players, numPlayers);
       
     }
-
+    
     free(schedule);
     
   }
