@@ -4,19 +4,24 @@
 #include <stdint.h>
 
 #define MAX_PLAYERS 100
-// Will take over 30s for 50000+ simulations
-#define NUM_SIMULATIONS 10
+// ~30s for 50000 simulations
+// ~50s for 100000 simulations
+#define NUM_SIMULATIONS 100000
 
 enum {ROUND_ROBIN, DOUBLE_ROUND_ROBIN};
 
 typedef struct {
   char name[20];
   uint16_t rating; // FIDE, Chesscom, CCRL etc.
+
   double score;
   uint32_t games;
   double scoreRate;
   double perf;
+
   uint8_t isSelected;
+  uint32_t wins; // Number of times the player is #1
+  double winProb; // Probability of winning the tournament
 } _Player;
 
 typedef struct {
@@ -35,6 +40,8 @@ extern void winDrawLoss(uint16_t rating1, uint16_t rating2, double *player1_winP
 extern void fightAndUpdate(_Pair *pair);
 extern double calcPerf(_Player *playList, uint8_t numPlayers, uint16_t rating, double scoreRate);
 extern void updatePerfs(_Player *playList, uint8_t numPlayers);
+extern void updateWinProbs(_Player *playList, uint8_t numPlayers);
+extern double roundToNearestHalf(double x);
 extern void scaleScores(_Player *playList, uint8_t numPlayers, int rrType);
 
 // tourney.c

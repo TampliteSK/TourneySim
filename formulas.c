@@ -22,14 +22,15 @@ double eloPerPawnAtElo(uint16_t elo) {
 void winDrawLoss(uint16_t rating1, uint16_t rating2, double *player1_winP, double *drawP, double *player2_winP) {
     // Where rating1 <= rating2
     int16_t eloDiff = rating1 - rating2;
-    // printf("eloDiff = %hi\n", eloDiff);
     double avgElo = (rating1 + rating2) / 2.0;
-    // printf("avgElo = %lf\n", avgElo);
 
     double expectedScore = eloNormal(eloDiff);
-    // printf("expectedScore = %lf\n", expectedScore);
-    double eloShift = eloPerPawnAtElo(avgElo) * 0.6;
-    // printf("eloShift = %lf\n", eloShift);
+    double aggression = 0.6;
+    // A measure of how willing players are to fight for wins (lower draw rate)
+    // e.g. Candidates is a high-stake tournament, so this value should be higher.
+    // Recommended range: 0 ~ 0.6
+    // Default: 0
+    double eloShift = eloPerPawnAtElo(avgElo) * (0.6 - aggression);
 
     *player1_winP = eloNormal(eloDiff - eloShift);
     // expectedScore = player1_winP + drawP / 2
@@ -59,7 +60,7 @@ void fightAndUpdate(_Pair *pair) {
     srand(time(NULL)); // RNG seed
     double randResult = (double)rand() / RAND_MAX;
     // printf("\nrandResult = %lf\n", randResult);
-
+    
     // Updating data of players depending on result
     // Separate 0.00 - 1.00 block to white_winP, draw and black_winP
     if (randResult <= white_winP) {
@@ -88,28 +89,54 @@ void fightAndUpdate(_Pair *pair) {
 
 // Calculates performance
 double calcPerf(_Player *playList, uint8_t numPlayers, uint16_t rating, double scoreRate) {
-
   double opposition = 0;
   for (int i = 0; i < numPlayers; ++i)
     opposition += playList[i].rating;
   opposition = (double)(opposition - rating) / (numPlayers - 1);
 
-  double relativePerf = -400 * log10( 1/scoreRate - 1 );
-
+  double relativePerf;
+  if (scoreRate == 0 || scoreRate == 1) {
+    relativePerf = (scoreRate == 0) ? -850 : 850;
+  } else {
+    relativePerf = -400 * log10( 1/scoreRate - 1 );
+  }
+  
   return opposition + relativePerf;
-
+  
 }
 
 // Updates performances of players
 void updatePerfs(_Player *playList, uint8_t numPlayers) {
-  for (int i = 0; i < numPlayers; ++i)
-    playList[i].perf = calcPerf(playList, numPlayers, playList[i].rating, playList[i].scoreRate);
+    for (int i = 0; i < numPlayers; ++i) {
+        playList[i].perf = calcPerf(playList, numPlayers, playList[i].rating,   playList[i].scoreRate);
+    }
+}
+
+// Updates winProb of players
+void updateWinProbs(_Player *playList, uint8_t numPlayers) {
+    for (int i = 0; i < numPlayers; ++i) {
+        playList[i].winProb = (double)playList[i].wins / NUM_SIMULATIONS * 100;
+    }
+}
+
+// Rounds a scaled down score to the nearest 0.5
+double roundToNearestHalf(double x) {
+  double decimal, integral;
+  decimal = modf(x, &integral);
+  if (decimal >= 0.75) {
+    return ceil(x);
+  } else if (decimal < 0.25) {
+    return floor(x);
+  } else {
+    return floor(x) + 0.5;
+  }
 }
 
 // Scales down scores based on number of simulations (round robins)
 void scaleScores(_Player *playList, uint8_t numPlayers, int rrType) {
     for (int i = 0; i < numPlayers; ++i) {
         playList[i].games = (numPlayers - 1) * (rrType + 1);
-        playList[i].score = playList[i].games * playList[i].scoreRate;
+        playList[i].score = roundToNearestHalf(playList[i].games * playList[i].scoreRate);
     }
 }
+
