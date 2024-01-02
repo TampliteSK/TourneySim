@@ -1,8 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h> // malloc()
-#include <math.h> // ceil()
 #include <stdint.h> // uint8_t: 0~127， uint16_t: 0~32767
-#include <time.h> // time()
 #include "defs.h"
 
 // Main program
