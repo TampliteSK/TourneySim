@@ -15,6 +15,8 @@ void initPlayers(_Player *playList, uint8_t *numPlays) {
       playList[*numPlays].scoreRate = 0;
       playList[*numPlays].perf = 0;
       playList[*numPlays].isSelected = 0;
+      playList[*numPlays].wins = 0;
+      playList[*numPlays].winProb = 0;
       ++*numPlays;
     }
     fclose(fptr);
@@ -33,14 +35,15 @@ void sortPlayers(_Player *playList, uint8_t numPlayers) {
             }
         }
     }
+    playList[0].wins++;
 }
 
 // Prints players' data
 void printData(_Player *playList, uint8_t numPlayers) {
     printf("\n\n");
-    printf("╔═════════════════════╦════════╦═══════╦══════╗\n");
-    printf("║       Players       ║ Rating ║ Score ║ Perf ║\n");
+    printf("╔═════════════════════╦════════╦═══════╦══════╦══════╗\n");
+    printf("║       Players       ║ Rating ║ Score ║ Perf ║ Win%% ║\n");
     for (int i = 0; i < numPlayers; ++i)
-      printf("║%21s║%8d║%4.1lf/%-2d║%6.1lf║\n", playList[i].name, playList[i].rating, playList[i].score, playList[i].games, playList[i].perf);
-    printf("╚═════════════════════╩════════╩═══════╩══════╝\n");
+      printf("║%21s║%8d║%4.1lf/%-2d║%6.1lf║%6.2lf║\n", playList[i].name, playList[i].rating, playList[i].score, playList[i].games, playList[i].perf, playList[i].winProb);
+    printf("╚═════════════════════╩════════╩═══════╩══════╩══════╝\n");
 }
