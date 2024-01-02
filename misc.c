@@ -35,7 +35,6 @@ void sortPlayers(_Player *playList, uint8_t numPlayers) {
             }
         }
     }
-    playList[0].wins++;
 }
 
 // Prints players' data

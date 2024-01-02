@@ -28,29 +28,32 @@ int main(void) {
   // Round robin simulation
   if (tournType == DOUBLE_ROUND_ROBIN || tournType == ROUND_ROBIN) {
     
+    uint8_t numPairs = numPlayers / 2;
+    uint8_t numRounds = numPlayers - 1;
+    uint8_t totalMatches = numPairs * numRounds;
+
+    // Allocate memory for schedule
+    _Pair *schedule = (_Pair *)malloc(totalMatches * sizeof(_Pair));
+    if (schedule == NULL) {
+      printf("Failed to allocate memory for \"schedule\".\n");
+        return -1;
+    }
+        
     for (int sim = 0; sim < NUM_SIMULATIONS; ++sim) {
       
       for (int cycle = 0; cycle < tournType + 1; ++cycle) {
 
-        uint8_t numPairs = numPlayers / 2;
-        uint8_t numRounds = numPlayers - 1;
-        uint8_t totalMatches = numPairs * numRounds;
-
-        // Allocate memory for schedule
-        _Pair *schedule = (_Pair *)malloc(totalMatches * sizeof(_Pair));
-        if (schedule == NULL) {
-            printf("Failed to allocate memory for \"schedule\".\n");
-            return -1;
-        }
-        
         generateRoundRobinSchedule(players, numPlayers, schedule);
         
       }
       
       sortPlayers(players, numPlayers);
+      players[0].wins++;
       updatePerfs(players, numPlayers);
       
     }
+
+    free(schedule);
     
   }
 
