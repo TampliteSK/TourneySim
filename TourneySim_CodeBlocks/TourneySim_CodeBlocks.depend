@@ -1,0 +1,31 @@
+# depslib dependency file v1.0
+1704185076 source:c:\users\regen\documents\files\programming\c\tourneysim\formulas.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<stdint.h>
+	<time.h>
+	"defs.h"
+
+1704185050 c:\users\regen\documents\files\programming\c\tourneysim\defs.h
+	<stdio.h>
+	<stdint.h>
+
+1704185066 source:c:\users\regen\documents\files\programming\c\tourneysim\main.c
+	<stdio.h>
+	<stdlib.h>
+	<math.h>
+	<stdint.h>
+	<time.h>
+	"defs.h"
+
+1704185091 source:c:\users\regen\documents\files\programming\c\tourneysim\misc.c
+	<stdio.h>
+	"defs.h"
+
+1704110804 source:c:\users\regen\documents\files\programming\c\tourneysim\tourney.c
+	<stdio.h>
+	<stdlib.h>
+	<time.h>
+	"defs.h"
+
