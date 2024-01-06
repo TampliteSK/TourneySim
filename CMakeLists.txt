@@ -30,9 +30,14 @@ set(TOURNEYSIM_HEADERS
     "Source/defs.h"
 )
 
+set(TOURNEYSIM_TEXTFILES
+    "Source/players.txt"
+)
+
 target_sources(TourneySim
     PRIVATE
         ${TOURNEYSIM_SOURCES}
     PUBLIC
         ${TOURNEYSIM_HEADERS}
+        ${TOURNEYSIM_TEXTFILES}
 )
