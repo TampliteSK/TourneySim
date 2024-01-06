@@ -4,5 +4,5 @@ caruana 2804
 abasov 2641
 gujrathi 2742
 nakamura 2788
-dommaraju 2725
-firouzja 2764
+dommaraju 2750
+firouzja 2759
